@@ -1,0 +1,2 @@
+serviceClass: com.sjsu.booktrade.client.GreetingService
+path: 0EC089C8CF7BD76910553DEEE670EB39.gwt.rpc

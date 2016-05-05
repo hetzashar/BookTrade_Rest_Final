@@ -1,0 +1,2 @@
+# Module booktrade_rest
+# RPC service class, partial path of RPC policy file
