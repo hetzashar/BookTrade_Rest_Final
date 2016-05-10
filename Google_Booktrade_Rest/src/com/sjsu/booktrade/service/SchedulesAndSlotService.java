@@ -46,7 +46,7 @@ public class SchedulesAndSlotService {
 			Connection connection = ConnectionPool.getConnectionFromPool();
 
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("select * from booktrade.pickup_schedules where pickup_schedules.bookId = ?");
+					.prepareStatement("select * from booktrade.pickup_schedules where pickup_schedules.book_id = ?");
 			preparedStatement.setInt(1, bookId);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -69,7 +69,6 @@ public class SchedulesAndSlotService {
 	}
 
 	public static boolean updateBuyersPickupDetails(int bookId, Date pickupDate, String collectionTime, String day) {
-		boolean addStatus = false;
 		try{
 			Connection connection = ConnectionPool.getConnectionFromPool();
 
@@ -81,16 +80,15 @@ public class SchedulesAndSlotService {
 				preparedStatement.setString(3, day);
 				preparedStatement.setInt(4, bookId);
 
-				int registerUpdate = preparedStatement.executeUpdate();
+				preparedStatement.executeUpdate();
 				ConnectionPool.addConnectionBackToPool(connection);
-				if(registerUpdate == 1){
-					addStatus = true;
-				}	
+				return true;
 			}
 
 		}catch(Exception e){
 			e.printStackTrace();
+			return false;
 		}
-		return addStatus;
+		
 	}
 }

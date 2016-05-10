@@ -305,7 +305,7 @@ public class BookSearchService {
 		
 		PreparedStatement preparedStatement = connection
 				.prepareStatement("SELECT books.book_name, books.bookId, books.category, books.edition, books.price, books.pickUpOrShip, books.author, books.userId, "
-						+ "address.latitude, address.longitude, books.image_url_small, books.image_url_large, books.notes FROM booktrade.books, booktrade.address WHERE ISAVAILABLE=1 AND books.userId!=? and books.bookId=address.bookId");
+						+ "address.latitude, address.longitude, books.image_url_small, books.image_url_large, books.notes FROM booktrade.books, booktrade.address WHERE ISAVAILABLE=1 AND books.bookId=address.bookId");
 
 		preparedStatement.setInt(1, userId);
 		ResultSet rs = preparedStatement.executeQuery();
@@ -320,12 +320,14 @@ public class BookSearchService {
 				books.setCategory(rs.getString("category"));
 				books.setEdition(rs.getInt("edition"));
 				books.setPrice(rs.getDouble("price"));
-				books.setPickUpOrShip(rs.getString("pickUpOrShip"));
+				books.setPickUpOrShip(rs.getString("pickUpOrShip"));	
 				books.setAuthor(rs.getString("author"));
 				books.setUser(UserService.getUserDetailsFromId(rs.getInt("userId")));
 				books.setImageURLSmall(rs.getString("image_url_small"));
 				books.setImageURLLarge(rs.getString("image_url_large"));
 				books.setNotes(rs.getString("notes"));
+				books.setUser(UserService.getUserDetailsFromId(rs.getInt("userId")));
+				books.setAddress(AddressService.getAddressFromBookIdAndUserId(rs.getInt("bookId")));
 				books.setSchedules(SchedulesAndSlotService.getSchedulesFromBookId(rs.getInt("bookId")));
 				booksList.add(books);
 			}

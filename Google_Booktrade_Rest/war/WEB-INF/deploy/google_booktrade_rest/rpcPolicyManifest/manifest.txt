@@ -1,2 +1,3 @@
 # Module google_booktrade_rest
 # RPC service class, partial path of RPC policy file
+com.sjsu.booktrade.client.GreetingService, 0EC089C8CF7BD76910553DEEE670EB39.gwt.rpc

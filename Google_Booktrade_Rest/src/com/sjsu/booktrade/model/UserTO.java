@@ -9,6 +9,7 @@ public class UserTO {
 	private String password;
 	private String userType;
 	private String contactNumber;
+	private double credits;
 
 	public int getUserId() {
 		return userId;
@@ -51,6 +52,12 @@ public class UserTO {
 	}
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+	public double getCredits() {
+		return credits;
+	}
+	public void setCredits(double credits) {
+		this.credits = credits;
 	}
 	
 }

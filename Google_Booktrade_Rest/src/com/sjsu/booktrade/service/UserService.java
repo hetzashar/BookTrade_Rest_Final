@@ -196,6 +196,7 @@ public class UserService {
 				userInfo.setContactNumber(resultSet.getString("contact_number"));
 				userInfo.setEmailId(resultSet.getString("emailId"));
 				userInfo.setUserId(resultSet.getInt("userId"));
+				userInfo.setCredits(resultSet.getDouble("credits"));
 			}
 			ConnectionPool.addConnectionBackToPool(connection);
 			return userInfo;

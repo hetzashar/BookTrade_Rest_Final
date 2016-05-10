@@ -91,7 +91,7 @@ public class BuyerService {
 					day = "Sunday";
 					break;
 				}
-				
+
 				String collectionTime=null;
 				if(jsonObject.has("pickupTime"))
 					collectionTime = jsonObject.getString("pickupTime");
@@ -116,10 +116,10 @@ public class BuyerService {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 		return Response.status(400).entity(" Error Encountered!! ").build();
 	}	
-	
+
 	@POST
 	@Path("/fetchAllPostedAds")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -156,9 +156,9 @@ public class BuyerService {
 		}
 		ConnectionPool.addConnectionBackToPool(connection);
 		return Response.status(201).entity(booksList).build();
-		
+
 	}
-	
+
 	@POST
 	@Path("/fetchAllPlacedOrders")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -195,22 +195,20 @@ public class BuyerService {
 		}
 		ConnectionPool.addConnectionBackToPool(connection);
 		return Response.status(201).entity(booksList).build();
-		
+
 	}
-	
+
 	@POST
-	@Path("/fetchTransactions")
+	@Path("/fetchBoughtBooks")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response fetchTransactions(String userIdString) throws Exception{
+	public Response fetchBoughtBooks(String userIdString) throws Exception{
 
 		Connection connection = ConnectionPool.getConnectionFromPool();
 
-		HashMap<String, List<BooksTO>> mapBooks = new HashMap<String, List<BooksTO>>();
-		
 		JSONObject jsonObject = new JSONObject(userIdString);
 		int userId = jsonObject.getInt("userId");
-		
+
 		PreparedStatement preparedStatement = connection
 				.prepareStatement("select * from booktrade.books where buyer_id=?");
 
@@ -233,12 +231,25 @@ public class BuyerService {
 			books.setSchedules(SchedulesAndSlotService.getSchedulesFromBookId(rs.getInt("bookId")));
 			boughtBooksList.add(books);
 		}
-		mapBooks.put("Bought", boughtBooksList);
-		
-		preparedStatement = connection
+		ConnectionPool.addConnectionBackToPool(connection);
+		return Response.status(201).entity(boughtBooksList).build();
+	}
+
+	@POST
+	@Path("/fetchSoldBooks")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response fetchSoldBooks(String userIdString) throws Exception{
+
+		Connection connection = ConnectionPool.getConnectionFromPool();
+
+		JSONObject jsonObject = new JSONObject(userIdString);
+		int userId = jsonObject.getInt("userId");
+
+		PreparedStatement preparedStatement = connection
 				.prepareStatement("select * from booktrade.books where userId=?");
 		preparedStatement.setInt(1, userId);
-		rs = preparedStatement.executeQuery();
+		ResultSet rs = preparedStatement.executeQuery();
 		List<BooksTO> soldBookList = new ArrayList<BooksTO>();
 		while(rs.next()){
 			BooksTO books = new BooksTO();
@@ -256,9 +267,7 @@ public class BuyerService {
 			books.setSchedules(SchedulesAndSlotService.getSchedulesFromBookId(rs.getInt("bookId")));
 			soldBookList.add(books);
 		}
-		
-		mapBooks.put("Sold", soldBookList);
 		ConnectionPool.addConnectionBackToPool(connection);
-		return Response.status(201).entity(mapBooks).build();
+		return Response.status(201).entity(soldBookList).build();
 	}
 }
