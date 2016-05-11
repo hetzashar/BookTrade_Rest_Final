@@ -190,9 +190,15 @@ public class BookSearchService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response fetchBookDetails(String bookString) throws Exception{
 
-		Connection connection = ConnectionPool.getConnectionFromPool();
 		JSONObject jsonObject = new JSONObject(bookString);
 		int bookId = jsonObject.getInt("bookId");
+		
+		BooksTO books = fetchBookDetailsFromId(bookId);
+		return Response.status(201).entity(books).build();
+	}
+	
+	public static BooksTO fetchBookDetailsFromId(int bookId) throws Exception{
+		Connection connection = ConnectionPool.getConnectionFromPool();
 		PreparedStatement preparedStatement = connection
 				.prepareStatement("SELECT * FROM booktrade.books WHERE BOOKID=?");
 		preparedStatement.setInt(1, bookId);
@@ -216,7 +222,7 @@ public class BookSearchService {
 			books.setImageURLSmall(rs.getString("image_url_large"));
 		}
 		ConnectionPool.addConnectionBackToPool(connection);
-		return Response.status(201).entity(books).build();
+		return books;
 	}
 	
 	@POST
