@@ -126,6 +126,7 @@ public class UserService {
 				userInfo.setContactNumber(resultSet.getString("contact_number"));
 				userInfo.setEmailId(resultSet.getString("emailId"));
 				userInfo.setUserId(resultSet.getInt("userId"));
+				userInfo.setCredits(resultSet.getDouble("credits"));
 				loginStatus = true;
 			}
 			ConnectionPool.addConnectionBackToPool(connection);

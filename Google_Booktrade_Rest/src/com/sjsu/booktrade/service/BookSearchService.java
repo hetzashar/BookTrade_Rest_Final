@@ -307,7 +307,7 @@ public class BookSearchService {
 				.prepareStatement("SELECT books.book_name, books.bookId, books.category, books.edition, books.price, books.pickUpOrShip, books.author, books.userId, "
 						+ "address.latitude, address.longitude, books.image_url_small, books.image_url_large, books.notes FROM booktrade.books, booktrade.address WHERE ISAVAILABLE=1 AND books.bookId=address.bookId");
 
-		preparedStatement.setInt(1, userId);
+		//preparedStatement.setInt(1, userId);
 		ResultSet rs = preparedStatement.executeQuery();
 		List<BooksTO> booksList = new ArrayList<BooksTO>();
 		while(rs.next()){
